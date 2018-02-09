@@ -28,9 +28,10 @@ public class PlayerController : MonoBehaviour {
 	public float maxSpeed;
 	public float speed;
 	public Vector2 knockbackAngle;
+    float fallMultiplyer = 25.0f;
 
-	//Weapon Variables
-	public GameObject curWeapon;
+    //Weapon Variables
+    public GameObject curWeapon;
 	private Transform curWeaponTrans;
 	private Transform gunTrans;
 	private int facing = -1;
@@ -93,13 +94,13 @@ public class PlayerController : MonoBehaviour {
 			Vector2 vertJump = new Vector2 (0.0f, jump);
 			if (controls.type == "ps4") {
 //				Debug.Log (Input.GetAxis (vert));
-				if ((Input.GetAxis (controls.vert) < -0.85 || Input.GetKeyDown (controls.jumpBut2) || Input.GetKeyDown (controls.jumpBut3)) && jumpCount < 2 && Time.time > nextJump) {
+				if ((Input.GetKeyDown (controls.jumpBut2) || Input.GetKeyDown (controls.jumpBut3)) && jumpCount < 2 && Time.time > nextJump) {
 					nextJump = Time.time + jumpCoolDown;
 					jumpSound.Play ();
 					rb.AddForce (vertJump);
 					jumpCount++;
 					isGrounded = false;
-				}
+                }
 			}
 			else if (Input.GetKeyDown (controls.jumpBut) && jumpCount < 2 && Time.time > nextJump) {
 				nextJump = Time.time + jumpCoolDown;
@@ -109,8 +110,13 @@ public class PlayerController : MonoBehaviour {
 				isGrounded = false;
 			}
 
-			//Attack code TODO Improve code structure (not quite sure the best way)
-			if (curWeapon != null) {
+            if (rb.velocity.y < 0)
+            {
+                rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplyer - 1) * Time.deltaTime;
+            }
+            
+            //Attack code TODO Improve code structure (not quite sure the best way)
+            if (curWeapon != null) {
 				if (Input.GetKey (controls.throwButton)) {
 					//Builds up power as the player holds down the throw button
 //					Debug.Log("Input key throw but");	
