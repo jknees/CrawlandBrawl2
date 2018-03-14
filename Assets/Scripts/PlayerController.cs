@@ -27,8 +27,9 @@ public class PlayerController : MonoBehaviour {
 	private Rigidbody2D rb;
 	public float maxSpeed;
 	public float speed;
+    public float airSpeed = 5000;
 	public Vector2 knockbackAngle;
-    float fallMultiplyer = 25.0f;
+    float fallMultiplyer = 30.0f;
 
     //Weapon Variables
     public GameObject curWeapon;
@@ -174,11 +175,21 @@ public class PlayerController : MonoBehaviour {
 				footStep.Stop ();
 			}
 
-			Vector2 movement = new Vector2 (moveHorizontal * speed * Time.deltaTime, 0.0f);
-			rb.AddForce (movement);
+            Vector2 movement;
+
+            if (isGrounded)
+            {
+                movement = new Vector2(moveHorizontal * speed * Time.deltaTime, 0.0f);
+            }
+            else
+            {
+                movement = new Vector2(moveHorizontal * airSpeed * Time.deltaTime, 0.0f);
+            }
+
+            rb.AddForce (movement);
 
 			// Limits the speed of the character to maxSpeed
-			if (rb.velocity.magnitude > maxSpeed) {
+			if (rb.velocity.x > maxSpeed) {
 				rb.velocity = rb.velocity.normalized * maxSpeed;
 			}
 		}
@@ -196,11 +207,15 @@ public class PlayerController : MonoBehaviour {
 	private void OnCollisionEnter2D(Collision2D other) {
 		AudioSource[] audioSources = GetComponents<AudioSource> ();
 
-		//Resets jump count if there is an object is below player
-		if (Vector3.Dot (other.contacts[0].normal, Vector3.up) > 0.5) { 
-			isGrounded = true;
-			jumpCount = 0;
-		}
+        //Resets jump count if there is an object is below player
+        if (other.contacts.Length > 0)
+        {
+            if (Vector3.Dot(other.contacts[0].normal, Vector3.up) > 0.5)
+            {
+                isGrounded = true;
+                jumpCount = 0;
+            }
+        }
 
 		switch (other.gameObject.tag) {
 			case "damage":
@@ -209,10 +224,10 @@ public class PlayerController : MonoBehaviour {
 				float velocity = other.relativeVelocity.x;
 				velocity *= Mathf.Abs (1 / velocity); 									// Normalize magnetude to 1.
 				Vector2 Angle = new Vector2 ((velocity * knockbackAngle.x), knockbackAngle.y);
-				rb.AddForce (Angle * other.gameObject.GetComponent<ProjectileController> ().knockback * ((101 - health) / 10));
+				rb.AddForce (Angle * other.gameObject.GetComponent<ProjectileController> ().knockback * ((101 - health)/10));
 				increaseBlood (hitsTaken);
 				blood.Play ();
-					//Instantiate (blood, transform.position, Quaternion.identity);
+			    Instantiate (blood, transform.position, Quaternion.identity);
 				audioSources [Random.Range (3, 5)].Play ();
 				if (other.gameObject.layer == 14) {
 					Destroy (other.gameObject);
@@ -242,20 +257,20 @@ public class PlayerController : MonoBehaviour {
 				audioSources[Random.Range (3, 5)].Play ();
 				break;
 
-		case "Thrown Item":
-			hitsTaken++;
-			float gunVelocity = other.relativeVelocity.x;
-			if (gunVelocity != 0) {
-				gunVelocity = gunVelocity * Mathf.Abs (1 / gunVelocity); // Normalize magnetude to 1.
-				Vector2 gunAngle = new Vector2 ((gunVelocity * knockbackAngle.x), knockbackAngle.y);
-				rb.AddForce (gunAngle * other.relativeVelocity.x * other.relativeVelocity.x / 3);
-			} else {
-				float tempDirection = (transform.position.x - other.gameObject.transform.position.x);
-				tempDirection *= Mathf.Abs (1 / tempDirection);
-				Vector2 tempAngle = new Vector2 ((tempDirection * knockbackAngle.x), knockbackAngle.y);
-				rb.AddForce (tempAngle * 3000);
-			}
-				break;
+		    case "Thrown Item":
+			    hitsTaken++;
+			    float gunVelocity = other.relativeVelocity.x;
+			    if (gunVelocity != 0) {
+				    gunVelocity = gunVelocity * Mathf.Abs (1 / gunVelocity); // Normalize magnetude to 1.
+				    Vector2 gunAngle = new Vector2 ((gunVelocity * knockbackAngle.x), knockbackAngle.y);
+				    rb.AddForce (gunAngle * other.relativeVelocity.x * other.relativeVelocity.x / 3);
+			    } else {
+				    float tempDirection = (transform.position.x - other.gameObject.transform.position.x);
+				    tempDirection *= Mathf.Abs (1 / tempDirection);
+				    Vector2 tempAngle = new Vector2 ((tempDirection * knockbackAngle.x), knockbackAngle.y);
+				    rb.AddForce (tempAngle * 3000);
+			    }
+			    break;
 		}
 	}
 

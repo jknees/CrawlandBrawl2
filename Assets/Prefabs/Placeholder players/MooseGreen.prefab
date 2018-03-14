@@ -320,7 +320,7 @@ Transform:
   m_GameObject: {fileID: 1998244026620684}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -13.4, y: 8.6, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
   - {fileID: 4342322773046546}
   - {fileID: 4483204737712410}
@@ -946,14 +946,15 @@ MonoBehaviour:
   punch1: {fileID: 0}
   jump: 10000
   maxSpeed: 190000
-  speed: 19000
+  speed: 25000
+  airSpeed: 20000
   knockbackAngle: {x: 1, y: 1}
   curWeapon: {fileID: 0}
   movementDustRight: {fileID: 198646025282847720}
   movementDustLeft: {fileID: 198191420146635812}
   blood: {fileID: 198124490034422208}
   playerIcon: {fileID: 21300000, guid: 7557034ba2ce14ec1bdf7357fee26f0b, type: 3}
-  scale: 0.9
+  scale: 1.5
   canvasScale: 1
 --- !u!114 &114216363531140946
 MonoBehaviour:

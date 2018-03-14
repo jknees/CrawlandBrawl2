@@ -29,7 +29,6 @@ public class BoundaryController : MonoBehaviour {
 				temp.playable = false;
 				print (collision.transform.name + " has died");
 				collision.gameObject.SetActive (false);
-				Debug.Log (collision.gameObject.activeSelf);
 				playerIcons [temp.controls.playerNum].SetActive (false);
 											
 				Vector3 playerPos = collision.transform.position;

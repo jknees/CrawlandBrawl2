@@ -45,7 +45,7 @@ public class Gun : Weapons {
 				curBullet.gameObject.SetActive (true);
 
 				//Kickback added to player
-				transform.parent.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (-facing, 0.5f) * knockback);
+				transform.parent.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (-facing, 0.5f) * (knockback / 10));
 			}
 
 			Instantiate (muzzleFlash, curBullet.position+(Vector3.right*3*facing), Quaternion.identity);

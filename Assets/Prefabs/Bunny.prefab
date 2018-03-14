@@ -346,7 +346,7 @@ Transform:
   m_GameObject: {fileID: 1335020872447914}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12.2, y: 14.2, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children:
   - {fileID: 4713494615856654}
   - {fileID: 4143858501559448}
@@ -1098,7 +1098,7 @@ MonoBehaviour:
   movementDustLeft: {fileID: 198846271093788154}
   blood: {fileID: 198081595169188366}
   playerIcon: {fileID: 21300000, guid: 9b62b679c10fc45489e3840311bb3622, type: 3}
-  scale: 3
+  scale: 4
   canvasScale: 0.38
 --- !u!114 &114528683008444700
 MonoBehaviour:

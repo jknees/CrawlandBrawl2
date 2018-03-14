@@ -18,9 +18,12 @@ public class GameController : MonoBehaviour {
 
 
 	private PlayerController temp;
+    private Text tempPlayerText;
 
-	// Use this for initialization
-	void Start () {
+    private Color[] playerColors = { new Color(0.3F, 0.5F, 1.0F), new Color(1.0F, 0.0F, 0.0F), new Color(0.97F, 0.98F, 0.0F), new Color(0.0F, 0.66F, 0.13F) };
+
+    // Use this for initialization
+    void Start () {
 		// Spawn location, if none then adds vectors ([0,3],0,0)
 		if (spawnpoints != null) {
 			spawns = new List<Vector3> ();
@@ -58,8 +61,11 @@ public class GameController : MonoBehaviour {
 			players [i].GetComponent<PlayerController> ().controls = Globals.controllers[i];
 			playerIcons [i].gameObject.SetActive(true);
 
-			players[i].transform.Find("StaticPlayerCanvas").Find ("PlayerLabel").GetComponent<Text>().text = "Player " + (i + 1);
-			Globals.Players [i] = players [i];
+            tempPlayerText = players[i].transform.Find("StaticPlayerCanvas").Find("PlayerLabel").GetComponent<Text>();
+            tempPlayerText.text = "P" + (i + 1);
+            tempPlayerText.color = playerColors[i];
+
+            Globals.Players [i] = players [i];
 		}
 
 		//Space modifier
@@ -67,15 +73,6 @@ public class GameController : MonoBehaviour {
 			Physics2D.gravity = new Vector2 (0, -3.0f);
 		} else {
 			Physics2D.gravity = new Vector2 (0, -9.81f);
-		}
-		if (onIceMap) {
-			foreach (GameObject player in Globals.Players) { 
-				player.GetComponent<PlayerController> ().speed = 13300;
-			}
-		} else if (!onIceMap) {
-			foreach (GameObject player in Globals.Players) { 
-				player.GetComponent<PlayerController> ().speed = 19000;
-			}
 		}
 			
 	}
